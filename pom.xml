@@ -53,18 +53,6 @@
     </dependency>
   </dependencies>
 
-  <profiles>
-    <profile>
-      <id>downloadSources</id>
-      <activation>
-        <activeByDefault>true</activeByDefault>
-      </activation>
-      <properties>
-        <downloadSources>true</downloadSources>
-        <downloadJavadocs>true</downloadJavadocs>
-      </properties>
-    </profile>
-  </profiles>
 
   <build>
     <plugins>
@@ -75,6 +63,14 @@
           <suiteXmlFiles>
             <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
           </suiteXmlFiles>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-eclipse-plugin</artifactId>
+        <configuration>
+          <downloadSources>true</downloadSources>
+          <downloadJavadocs>true</downloadJavadocs>
         </configuration>
       </plugin>
     </plugins>

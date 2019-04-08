@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.jar.JarFile;
+import org.assertj.core.api.Assertions;
 import org.testng.Assert;
 import org.testng.TestNG;
 import org.testng.annotations.Test;
@@ -13,16 +15,26 @@ public class JavadocsTest {
 
   @Test
   public void testJavadocsAvailability() throws IOException {
+    runTest("javadoc", "org/testng/TestNG.html");
+  }
+
+  @Test
+  public void testSourcesAvailability() throws IOException {
+    runTest("sources", "org/testng/TestNG.java");
+  }
+
+  private void runTest(String type, String toTest) throws IOException {
     String location = TestNG.class.getProtectionDomain().getCodeSource().getLocation().getFile();
-    File file = new File(location).getParentFile();
-    String[] files = file.list((dir, name) -> name.endsWith("javadoc.jar"));
-    Assert.assertNotNull(files);
-    Assert.assertTrue(files.length != 0, "Javadocs should have been found");
-    for (String each : files) {
-      Path imageFilePath = Paths.get(file.getAbsolutePath() + File.separator + each);
-      FileChannel imageFileChannel = FileChannel.open(imageFilePath);
-      float mb = imageFileChannel.size() / (1024 * 1024);
-      Assert.assertTrue(mb >= 0.9, "File [" + each + "] size should have been atleast 900 KB");
-    }
+    File directory = new File(location).getParentFile();
+    String[] jarFiles = directory.list((dir, name) -> name.endsWith(type + ".jar"));
+    Assert.assertNotNull(jarFiles);
+    Assert.assertTrue(jarFiles.length != 0, type + " Jar should have been found");
+    String file = jarFiles[0];
+    Path jarFileLocation = Paths.get(directory.getAbsolutePath() + File.separator + file);
+    JarFile jarFile = new JarFile(jarFileLocation.toFile());
+    Assertions.assertThat(jarFile.getEntry(toTest)).isNotNull();
+    FileChannel imageFileChannel = FileChannel.open(jarFileLocation);
+    float kb = imageFileChannel.size() / 1024;
+    Assert.assertTrue(kb >= 500, "File [" + jarFile + "] size should have been atleast 400 KB");
   }
 }
