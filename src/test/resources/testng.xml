@@ -6,6 +6,8 @@
       <class name="org.testng.sample.JarContentsTest"/>
       <class name="org.testng.sample.JavadocsTest"/>
       <class name="org.testng.sample.MetaInfReadTest"/>
+      <class name="org.testng.sample.VersionTest"/>
+      <class name="org.testng.sample.CompilerTest"/>
       <class name="org.testng.sample.MavenDependencyTest"/>
     </classes>
   </test>
