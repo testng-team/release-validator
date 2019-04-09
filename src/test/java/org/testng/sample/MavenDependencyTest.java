@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.maven.model.Model;
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.description.TextDescription;
 import org.fuin.utils4maven.MavenPomReader;
 import org.testng.annotations.Test;
@@ -25,13 +25,13 @@ public class MavenDependencyTest {
 
     List<DependencyInformation> currentCompileTime = extractDependencies(currentModel, COMPILE);
     List<DependencyInformation> previousCompileTime = extractDependencies(previousModel, COMPILE);
-    Assertions.assertThat(currentCompileTime)
+    assertThat(currentCompileTime)
         .as(new TextDescription(MSG_TEMPLATE, COMPILE, currentVersion, previousVersion))
         .containsExactlyInAnyOrder(previousCompileTime.toArray(new DependencyInformation[0]));
 
     List<DependencyInformation> currentProvided = extractDependencies(currentModel, PROVIDED);
     List<DependencyInformation> previousProvided = extractDependencies(previousModel, PROVIDED);
-    Assertions.assertThat(currentProvided)
+    assertThat(currentProvided)
         .as(new TextDescription(MSG_TEMPLATE, PROVIDED, currentVersion, previousVersion))
         .containsAll(previousProvided);
   }

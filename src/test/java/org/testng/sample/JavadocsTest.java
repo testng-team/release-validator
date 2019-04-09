@@ -6,8 +6,9 @@ import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.jar.JarFile;
-import org.assertj.core.api.Assertions;
-import org.testng.Assert;
+import static org.assertj.core.api.Assertions.assertThat;
+
+import org.assertj.core.description.TextDescription;
 import org.testng.TestNG;
 import org.testng.annotations.Test;
 
@@ -27,14 +28,18 @@ public class JavadocsTest {
     String location = TestNG.class.getProtectionDomain().getCodeSource().getLocation().getFile();
     File directory = new File(location).getParentFile();
     String[] jarFiles = directory.list((dir, name) -> name.endsWith(type + ".jar"));
-    Assert.assertNotNull(jarFiles);
-    Assert.assertTrue(jarFiles.length != 0, type + " Jar should have been found");
+    assertThat(jarFiles).isNotNull();
+    assertThat(jarFiles.length)
+        .as(new TextDescription(type + " Jar should have been found"))
+        .isNotEqualTo(0);
     String file = jarFiles[0];
     Path jarFileLocation = Paths.get(directory.getAbsolutePath() + File.separator + file);
     JarFile jarFile = new JarFile(jarFileLocation.toFile());
-    Assertions.assertThat(jarFile.getEntry(toTest)).isNotNull();
+    assertThat(jarFile.getEntry(toTest)).isNotNull();
     FileChannel imageFileChannel = FileChannel.open(jarFileLocation);
     float kb = imageFileChannel.size() / 1024;
-    Assert.assertTrue(kb >= 500, "File [" + jarFile + "] size should have been atleast 400 KB");
+    assertThat(kb)
+        .as(new TextDescription("File [" + jarFile + "] size should have been atleast 400 KB"))
+        .isGreaterThanOrEqualTo(500);
   }
 }

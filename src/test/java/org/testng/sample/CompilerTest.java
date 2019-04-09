@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
-import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.assertj.core.description.TextDescription;
 import org.testng.TestNG;
 import org.testng.annotations.Test;
@@ -29,7 +29,7 @@ public class CompilerTest {
       }
       data.readUnsignedShort(); //First comes the minor version value. Read and ignore it.
       int major = data.readUnsignedShort();
-      Assertions.assertThat(major).as(new TextDescription("Ensure JDK8 compatibility")).isEqualTo(52);
+      assertThat(major).as(new TextDescription("Ensure JDK8 compatibility")).isEqualTo(52);
     }
   }
 }
