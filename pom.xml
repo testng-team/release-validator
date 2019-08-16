@@ -17,7 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
-    <version>7.0.0-beta5</version>
+    <version>7.0.0-beta7</version>
   </properties>
 
   <repositories>
