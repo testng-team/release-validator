@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.Function;
 import java.util.jar.JarFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -13,18 +14,21 @@ import org.testng.TestNG;
 import org.testng.annotations.Test;
 
 public class JavadocsTest {
+  private Function<Double, Double> kb = (size) -> size / 1024.0;
+  private Function<Double, Double> mb = (kb) -> kb / 1014.0;
 
   @Test
   public void testJavadocsAvailability() throws IOException {
-    runTest("javadoc", "org/testng/TestNG.html");
+    runTest("javadoc", "org/testng/TestNG.html", mb, 1);
   }
 
   @Test
   public void testSourcesAvailability() throws IOException {
-    runTest("sources", "org/testng/TestNG.java");
+    runTest("sources", "org/testng/TestNG.java", kb, 400);
   }
 
-  private void runTest(String type, String toTest) throws IOException {
+  private void runTest(String type, String toTest, Function<Double, Double> calculator, int expected)
+      throws IOException {
     String location = TestNG.class.getProtectionDomain().getCodeSource().getLocation().getFile();
     File directory = new File(location).getParentFile();
     String[] jarFiles = directory.list((dir, name) -> name.endsWith(type + ".jar"));
@@ -37,9 +41,9 @@ public class JavadocsTest {
     JarFile jarFile = new JarFile(jarFileLocation.toFile());
     assertThat(jarFile.getEntry(toTest)).isNotNull();
     FileChannel imageFileChannel = FileChannel.open(jarFileLocation);
-    float kb = imageFileChannel.size() / 1024;
-    assertThat(kb)
+    double size = calculator.apply((double) imageFileChannel.size());
+    assertThat(size)
         .as(new TextDescription("File [" + jarFile + "] size should have been atleast 400 KB"))
-        .isGreaterThanOrEqualTo(500);
+        .isGreaterThanOrEqualTo(expected);
   }
 }
