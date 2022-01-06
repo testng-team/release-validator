@@ -18,13 +18,14 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <version>7.0.0-beta7</version>
+    <version.shrinkwrap.resolvers>2.2.4</version.shrinkwrap.resolvers>
   </properties>
 
   <repositories>
     <repository>
       <id>sonatype.oss.snapshots</id>
       <name>Sonatype OSS Snapshot Repository</name>
-      <url>http://oss.sonatype.org/content/repositories/snapshots</url>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
       <releases>
         <enabled>false</enabled>
       </releases>
@@ -40,10 +41,31 @@
       <artifactId>testng</artifactId>
       <version>${version}</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.maven/maven-model -->
     <dependency>
-      <groupId>org.fuin</groupId>
-      <artifactId>utils4maven</artifactId>
-      <version>0.1.0-SNAPSHOT</version>
+      <groupId>org.apache.maven</groupId>
+      <artifactId>maven-model</artifactId>
+      <version>3.8.4</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-api-maven</artifactId>
+      <version>${version.shrinkwrap.resolvers}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-spi-maven</artifactId>
+      <version>${version.shrinkwrap.resolvers}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+      <version>${version.shrinkwrap.resolvers}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.jboss.shrinkwrap.resolver</groupId>
+      <artifactId>shrinkwrap-resolver-impl-maven-archive</artifactId>
+      <version>${version.shrinkwrap.resolvers}</version>
     </dependency>
     <dependency>
       <groupId>org.assertj</groupId>
@@ -51,6 +73,13 @@
       <version>3.22.0</version>
       <scope>test</scope>
     </dependency>
+	<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
+	<dependency>
+	    <groupId>org.slf4j</groupId>
+	    <artifactId>slf4j-simple</artifactId>
+	    <version>1.7.32</version>
+	</dependency>
+	
   </dependencies>
 
 
@@ -59,6 +88,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
+		<version>3.0.0-M5</version>
         <configuration>
           <suiteXmlFiles>
             <suiteXmlFile>src/test/resources/testng.xml</suiteXmlFile>
