@@ -29,7 +29,7 @@ public class CompilerTest {
       }
       data.readUnsignedShort(); //First comes the minor version value. Read and ignore it.
       int major = data.readUnsignedShort();
-      assertThat(major).as(new TextDescription("Ensure JDK8 compatibility")).isEqualTo(52);
+      assertThat(major).as(new TextDescription("Ensure JDK8 compatibility")).isEqualTo(55);
     }
   }
 }

@@ -14,7 +14,7 @@ It currently attempts at doing the following:
 To run the tests, just execute
 
 ```bash
-./mvntest.sh 7.0.0-beta5 7.0.0-beta3
+./mvntest.sh 7.8.0 7.9.0
 ```
 
 The shell script takes two parameters.
