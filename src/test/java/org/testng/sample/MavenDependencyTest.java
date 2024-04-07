@@ -25,6 +25,13 @@ public class MavenDependencyTest {
   private static final String PROVIDED = "provided";
   private static final String MSG_TEMPLATE = "<%s> scoped dependency comparison [%s] against [%s]";
 
+  private static final List<DependencyInformation> droppedSupport = List.of(
+      new DependencyInformation("org.apache.ant", "ant"),
+      new DependencyInformation("junit", "junit"));
+
+  private static final List<DependencyInformation> optionalSupport = 
+  List.of(new DependencyInformation("org.yaml", "snakeyaml"));
+
   private static Model readModel(String canonicalForm) throws IOException, XmlPullParserException {
     MavenResolverSystem resolver = Maven.resolver();
     MavenStrategyStage stage = resolver.resolve(canonicalForm);
@@ -46,7 +53,11 @@ public class MavenDependencyTest {
     Model previousModel = readModel(TESTNG_CANONICALFORM_PREFIX + previousVersion);
 
     List<DependencyInformation> currentCompileTime = extractDependencies(currentModel, COMPILE);
-    List<DependencyInformation> previousCompileTime = extractDependencies(previousModel, COMPILE);
+    List<DependencyInformation> previousCompileTime = extractDependencies(previousModel, COMPILE)
+        .stream()
+        .filter(it -> !droppedSupport.contains(it))
+        .filter(it -> !optionalSupport.contains(it))
+        .collect(Collectors.toList());
     assertThat(currentCompileTime)
         .as(new TextDescription(MSG_TEMPLATE, COMPILE, currentVersion, previousVersion))
         .containsExactlyInAnyOrder(previousCompileTime.toArray(new DependencyInformation[0]));
@@ -64,8 +75,7 @@ public class MavenDependencyTest {
             .orElse(COMPILE)
             .equalsIgnoreCase(scope))
         .map(
-            dependency ->
-                new DependencyInformation(dependency.getGroupId(), dependency.getArtifactId()))
+            dependency -> new DependencyInformation(dependency.getGroupId(), dependency.getArtifactId()))
         .collect(Collectors.toList());
   }
 
